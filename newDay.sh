@@ -1,6 +1,6 @@
 ROOT_DIR="days"
 if [ ! -d "$ROOT_DIR" ]; then
-  echo "Root directory does not exist for some reason, try again."
+  echo "Root directory does not exist for some reason, creating a new one."
   mkdir $ROOT_DIR
 fi
 
@@ -18,18 +18,7 @@ cd $DIR
 
 # put the boilerplate code in the index.ts file
 touch index.ts
-cat >./index.ts <<EOL
-import { readFileSync } from 'fs';
-const input = readFileSync('input.txt', 'utf8').split('\\n');
-
-const part1 = () => {
-  console.log('Part 1');
-};
-
-const part2 = () => {
-  console.log('Part 2');
-};
-EOL
+cat ../../template.ts > index.ts
 
 # curl the input data and put it in the input.txt file
 touch demo.txt
