@@ -11,12 +11,12 @@ console.log(input);
 
 const part1 = () => {
   const solution = 0;
-  console.log(`Part 1: ${solution}`);
+  console.log(`\nPart 1: ${solution}`);
 };
 
 const part2 = () => {
   const solution = 0;
-  console.log(`Part 2: ${solution}`);
+  console.log(`\nPart 2: ${solution}`);
 };
 
 part1();
