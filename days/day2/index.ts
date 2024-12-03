@@ -55,7 +55,31 @@ const part1 = () => {
 };
 
 const part2 = () => {
-  const solution = 0;
+  let numSafe = 0;
+  const reports = input.filter(val => !!val);
+  reports.forEach(levelString => {
+    const level = levelString.split(' ').map(num => parseInt(num, 10));
+    let safe = false;
+    const sortMethod = determineSort(level);
+    if (sortMethod !== 'invalid') {
+      for (let i = 0; i < level.length - 1; i++) {
+        let diff = 0;
+        const level1 = level[i];
+        const level2 = level[i + 1];
+        diff = sortMethod === 'asc' ? level2 - level1 : level1 - level2;
+        if (diff < 1 || diff > 3) {
+          safe = false;
+          break;
+        }
+        safe = true;
+      }
+    }
+    console.log('safe: ', safe);
+    console.log(level);
+    console.log();
+    numSafe += safe ? 1 : 0;
+  });
+  const solution = numSafe;
   console.log(`\nPart 2: ${solution}`);
 };
 
