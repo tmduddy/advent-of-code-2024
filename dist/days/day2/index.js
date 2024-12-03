@@ -84,11 +84,68 @@ const part1 = () => {
         numSafe += safe ? 1 : 0;
     });
     const solution = numSafe;
-    console.log(`Part 1: ${solution}`);
+    console.log(`\nPart 1: ${solution}`);
+};
+const checkSafety = (report) => {
+    let isSafe = false;
+    const sortMethod = determineSort(report);
+    if (sortMethod !== 'invalid') {
+        for (let i = 0; i < report.length - 1; i++) {
+            let diff = 0;
+            const level1 = report[i];
+            const level2 = report[i + 1];
+            diff = sortMethod === 'asc' ? level2 - level1 : level1 - level2;
+            if (diff < 1 || diff > 3) {
+                isSafe = false;
+                break;
+            }
+            isSafe = true;
+        }
+    }
+    return {
+        isSafe,
+        report,
+    };
+};
+const createPermutations = (inputArr) => {
+    const permutations = [];
+    for (let i = 0; i < inputArr.length; i++) {
+        const mutable = [...inputArr];
+        mutable.splice(i, 1);
+        permutations.push(mutable);
+    }
+    // console.log(permutations);
+    return permutations;
 };
 const part2 = () => {
-    const solution = 0;
-    console.log(`Part 2: ${solution}`);
+    let numSafe = 0;
+    const reports = input
+        .filter(val => !!val)
+        .map(levelString => levelString.split(' ').map(num => parseInt(num, 10)));
+    // console.log(reports);
+    const unsafeReports = [];
+    reports.forEach(level => {
+        const { report, isSafe } = checkSafety(level);
+        if (isSafe) {
+            numSafe += 1;
+        }
+        else {
+            unsafeReports.push(report);
+        }
+    });
+    unsafeReports.forEach(unsafeReport => {
+        const permutations = createPermutations(unsafeReport);
+        for (let i = 0; i < permutations.length; i++) {
+            const permutation = permutations[i];
+            const { isSafe } = checkSafety(permutation);
+            if (isSafe) {
+                numSafe += 1;
+                break;
+            }
+        }
+    });
+    const solution = numSafe;
+    console.log(`\nPart 2: ${solution}`);
 };
 part1();
 part2();
