@@ -29,7 +29,45 @@ const part1 = () => {
 };
 
 const part2 = () => {
-  const solution = 0;
+  const mulMatch = /mul\((\d+),(\d+)\)/g;
+  const cleanMatch = /mul\(\d+,\d+\)|do\(\)|don't\(\)/g;
+  const codeInput = input.join();
+
+  const cleanInputMatches = codeInput.matchAll(cleanMatch);
+  const cleanInputs = [...cleanInputMatches].map(match => {
+    return match[0];
+  });
+
+  let sum = 0;
+  let active = true;
+
+  for (let i = 0; i < cleanInputs.length; i++) {
+    const operator = cleanInputs[i];
+    switch (operator) {
+      case 'do()': {
+        active = true;
+        break;
+      }
+      case "don't()": {
+        active = false;
+        break;
+      }
+      default: {
+        if (active) {
+          const mulMatches = [...operator.matchAll(mulMatch)][0];
+          const [_, leftRaw, rightRaw] = mulMatches;
+          const left = parseInt(leftRaw, 10);
+          const right = parseInt(rightRaw, 10);
+
+          console.log(_, left, right);
+
+          sum += left * right;
+        }
+      }
+    }
+  }
+
+  const solution = sum;
   console.log(`\nPart 2: ${solution}`);
 };
 
