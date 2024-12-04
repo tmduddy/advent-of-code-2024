@@ -68,8 +68,30 @@ const part1 = () => {
   console.log(`\nPart 1: ${solution}`);
 };
 
+const checkCorners = (col: number, row: number, grid: string[][]): string => {
+  const topLeft = grid[col - 1][row - 1];
+  const topRight = grid[col + 1][row - 1];
+  const bottomLeft = grid[col - 1][row + 1];
+  const bottomRight = grid[col + 1][row + 1];
+
+  return `${topLeft}${topRight}${bottomLeft}${bottomRight}`;
+};
 const part2 = () => {
-  const solution = 0;
+  const validCorners = ['MMSS', 'MSMS', 'SMSM', 'SSMM'];
+  const grid = input.map(r => r.split(''));
+  let sum = 0;
+  for (let col = 1; col < grid.length - 1; col++) {
+    for (let row = 1; row < grid[0].length - 1; row++) {
+      const cell = grid[col][row];
+      if (cell === 'A') {
+        const corners = checkCorners(col, row, grid);
+        if (validCorners.includes(corners)) {
+          sum += 1;
+        }
+      }
+    }
+  }
+  const solution = sum;
   console.log(`\nPart 2: ${solution}`);
 };
 
