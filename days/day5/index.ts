@@ -81,6 +81,15 @@ const part2 = () => {
     }
   });
 
+  const checkIsValid = (idx: number, update: number[]): boolean => {
+    const ruleSet = rulesObj[update[idx]];
+    if (!ruleSet) {
+      return true;
+    }
+    const priorNumbers = [...update].splice(0, idx);
+    return priorNumbers.filter(num => ruleSet.has(num)).length === 0;
+  };
+
   const badUpdates: number[][] = [];
   updates.forEach(updateRaw => {
     const update = updateRaw.split(',').map(p => parseInt(p, 10));
@@ -91,9 +100,7 @@ const part2 = () => {
         isValid &&
         Object.keys(rulesObj).includes(page.toString())
       ) {
-        const ruleSet = rulesObj[page];
-        const priorNumbers = [...update].splice(0, idx);
-        isValid = priorNumbers.filter(num => ruleSet.has(num)).length === 0;
+        isValid = checkIsValid(idx, update);
       }
     });
     if (!isValid) {
@@ -101,10 +108,24 @@ const part2 = () => {
     }
   });
 
+  let sum = 0;
+  console.log(badUpdates);
   badUpdates.forEach(update => {
-    console.log(update)
-  })
-  const solution = 0;
+    let isValid = false;
+    while (!isValid) {
+      for (let idx = 1; idx < update.length; idx++) {
+        isValid = checkIsValid(idx, update);
+        if (isValid) {
+          continue;
+        }
+        [update[idx - 1], update[idx]] = [update[idx], update[idx - 1]];
+        break;
+      }
+    }
+    sum += update[Math.floor(update.length / 2)];
+  });
+
+  const solution = sum;
   console.log(`\nPart 2: ${solution}`);
 };
 
