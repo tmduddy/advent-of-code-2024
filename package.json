@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "npm run compile && AOC_DEMO=false ./build/runDay.sh",
+  "engines": {
+    "node": "18.20.5"
+  },
   "scripts": {
     "day": "npm run compile && AOC_DEMO=false ./build/runDay.sh",
     "day:new": "./build/newDay.sh",
