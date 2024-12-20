@@ -106,8 +106,94 @@ const part1 = () => {
   console.log(`\nPart 1: ${solution}`);
 };
 
+const getAntiNodeForPair2 = (
+  node1: location,
+  node2: location,
+  gridWidth: number,
+  gridHeight: number,
+): location[] => {
+  const antiNodes: location[] = [];
+
+  const vertDiff = node2[0] - node1[0];
+  let vertPos1 = node1[0] - vertDiff;
+  let vertPos2 = node2[0] + vertDiff;
+
+  const horzDiff = node2[1] - node1[1];
+  let horzPos1 = node1[1] - horzDiff;
+  let horzPos2 = node2[1] + horzDiff;
+
+  while (
+    vertPos1 >= 0 &&
+    vertPos1 < gridHeight &&
+    horzPos1 >= 0 &&
+    horzPos1 < gridWidth
+  ) {
+    antiNodes.push([vertPos1, horzPos1]);
+    vertPos1 -= vertDiff;
+    horzPos1 -= horzDiff;
+  }
+
+  while (
+    vertPos2 >= 0 &&
+    vertPos2 < gridHeight &&
+    horzPos2 >= 0 &&
+    horzPos2 < gridWidth
+  ) {
+    antiNodes.push([vertPos2, horzPos2]);
+    vertPos2 += vertDiff;
+    horzPos2 += horzDiff;
+  }
+
+  return antiNodes;
+};
+
 const part2 = () => {
-  const solution = 0;
+  const uniqNode = new Set<string>();
+  const grid = [...input].map(r => r.split(''));
+  const gridHeight = grid.length;
+  const gridWidth = grid[0].length;
+  const freqMap: Record<string, location[]> = {};
+  printGrid(grid);
+
+  // build a map of frequencies to their locations
+  grid.forEach((row, rowIdx) => {
+    row.forEach((col, colIdx) => {
+      if (col !== '.') {
+        const location: location = [rowIdx, colIdx];
+        if (freqMap[col]) {
+          freqMap[col].push(location);
+        } else {
+          freqMap[col] = [location];
+        }
+      }
+    });
+  });
+
+  Object.values(freqMap).forEach(locList => {
+    if (locList.length >= 2) {
+      locList.forEach(l => {
+        uniqNode.add(l.toString());
+      });
+    }
+    for (let i = 0; i < locList.length; i++) {
+      const locsToCheck = [...locList].splice(i);
+      for (let j = 1; j < locsToCheck.length; j++) {
+        const antiNodes = getAntiNodeForPair2(
+          locsToCheck[0],
+          locsToCheck[j],
+          gridWidth,
+          gridHeight,
+        );
+        antiNodes.forEach(n => {
+          uniqNode.add(n.toString());
+        });
+      }
+    }
+  });
+
+  printGrid(grid, uniqNode);
+
+  const solution = uniqNode.size;
   console.log(`\nPart 2: ${solution}`);
 };
 
