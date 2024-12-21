@@ -170,11 +170,11 @@ const part2 = () => {
   });
 
   Object.values(freqMap).forEach(locList => {
-    if (locList.length >= 2) {
-      locList.forEach(l => {
-        uniqNode.add(l.toString());
-      });
-    }
+    // if (locList.length >= 2) {
+    //   locList.forEach(l => {
+    //     uniqNode.add(l.toString());
+    //   });
+    // }
     for (let i = 0; i < locList.length; i++) {
       const locsToCheck = [...locList].splice(i);
       for (let j = 1; j < locsToCheck.length; j++) {
